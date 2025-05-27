@@ -44,7 +44,7 @@ var pixelData = map[int]life{
 		color: color.RGBA{0xff, 0xff, 0xff, 0xff},
 		strength: 5,
 		defense: 5,
-		surroundingLifeNeeded: 3,
+		surroundingLifeNeeded: 2,
 		minLifeToSustain: 2,
 		maxLifeToSustain: 3,
 	},
@@ -56,7 +56,7 @@ var pixelData = map[int]life{
 		color: color.RGBA{0xa0, 0x0, 0x0, 0xff},
 		strength: 5,
 		defense: 5,
-		surroundingLifeNeeded: 4,
+		surroundingLifeNeeded: 2,
 		minLifeToSustain: 1,
 		maxLifeToSustain: 2,
 	},
@@ -152,14 +152,15 @@ func (l *lifeState) updateLife() {
 			} else if (l.prevState[i].maxLifeToSustain<lifeCountMap[l.prevState[i].pixelValue]) {
 				l.currentState[i] = *New(0)
 			}
-		} else if l.prevState[i].lifeType == "dead" {
+		} else if (l.prevState[i].lifeType == "dead") || (l.prevState[i].lifeType == "grass") {
 
 			filtered := filterBySurroundingLifeNeeded(lifeCountMap)
-			
 			if (len(filtered) != 0) {
-				
-				maxLifeKey, _ := maxKeyVal(filtered)
-				l.currentState[i] = *New(maxLifeKey)
+				//maxLifeKey, _ := maxKeyVal(filtered)
+				//l.currentState[i] = *New(maxLifeKey)
+				randLifeKey := getRandomKey(filtered)
+				l.currentState[i] = *New(randLifeKey)
+
 			}
 		}
 		if (l.prevState[i].lifeType != "dead") && (l.prevState[i].defense < sumValues(incomingAttackStrength)) {
@@ -211,6 +212,17 @@ func filterBySurroundingLifeNeeded(lifeCounts map[int]int) map[int]int {
 		}
 	}
 	return filtered
+}
+
+func getRandomKey(m map[int]int) int {
+	keys := make([]int, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	if len(keys) == 0 {
+		return -1 // or handle empty map
+	}
+	return keys[rand.Intn(len(keys))]
 }
 
 func maxKeyVal(t map[int]int) (maxKey, maxVal int) {

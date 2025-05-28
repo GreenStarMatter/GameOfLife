@@ -45,7 +45,7 @@ func (l *lifeState) updateLife() {
 	for i:=0; i < len(l.currentState); i++ {
 		x,y := convertVectorToMatrix(i, pixelWidth * pixelHeight)
 		lifeCountMap, incomingAttackStrength := l.getSurroundingLifeInMatrix(x,y)
-		if (l.prevState[i].lifeType != "dead") { //TODO: change all of these rules to depend on life specific needs
+		if (l.prevState[i].lifeType != "dead") && (l.prevState[i].lifeType != "grass"){ //TODO: change all of these rules to depend on life specific needs
 			if (lifeCountMap[l.prevState[i].pixelValue] < l.prevState[i].minLifeToSustain) {
 				l.currentState[i] = *New(0)
 			} else if (l.prevState[i].minLifeToSustain<=lifeCountMap[l.prevState[i].pixelValue]) && (l.prevState[i].maxLifeToSustain>=lifeCountMap[l.prevState[i].pixelValue]){

@@ -5,8 +5,8 @@ import "image/color"
 var gameLife lifeState
 var stepSize int = 15
 var frameCounter int = 0
-const pixelWidth int = 100
-const pixelHeight int = 100
+const pixelWidth int = 300
+const pixelHeight int = 300
 
 const (
 	blackPixel = iota
@@ -33,7 +33,7 @@ var pixelData = map[int]life{
 	whitePixel: {
 		pixelValue: whitePixel,
 		lifeType: "neutral",
-		aggression: 5,
+		aggression: 2,
 		affinity: 8,
 		color: color.RGBA{0xff, 0xff, 0xff, 0xff},
 		strength: 5,
